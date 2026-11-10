@@ -22,6 +22,7 @@ Please make sure
 
 - reclaim action is enabled.
 - capacity plugin is enabled and proportion plugin is removed.
+- `conformance` and `capacity` are placed in the same tier (or `enableReclaimable: false` is set on `conformance` if kept in an earlier tier). Because `Session.Reclaimable` stops at the first tier that returns a non-empty victim candidate list, placing `conformance` alone in an earlier tier causes all non-critical tasks to be returned at Tier 1 and bypasses `capacity`'s `deserved` protection in Tier 2.
 
 Note:  capacity and proportion plugin are in conflict, the two plugins cannot be used together.
 
@@ -39,11 +40,11 @@ data:
       - name: priority
       - name: gang
         enablePreemptable: false
-      - name: conformance
     - plugins:
       - name: drf
         enablePreemptable: false
       - name: predicates
+      - name: conformance
       - name: capacity # add this field and remove proportion plugin.
       - name: nodeorder
       - name: binpack
@@ -74,11 +75,11 @@ data:
       - name: priority
       - name: gang
         enablePreemptable: false
-      - name: conformance
     - plugins:
       - name: drf
         enablePreemptable: false
       - name: predicates
+      - name: conformance
       - name: capacity # add this field and remove proportion plugin.
         enableHierarchy: true
         arguments:
